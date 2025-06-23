@@ -24,7 +24,6 @@
         }
 
         body {
-            background-color: var(--color-background);
             color: var(--color-text);
             font-family: var(--font-mono);
             margin: 0;
@@ -37,6 +36,22 @@
             text-align: center;
             overflow-x: hidden;
             box-sizing: border-box;
+            /* El color de fondo se mueve al nuevo div de fondo */
+        }
+
+        /* --- NUEVO FONDO ANIMADO --- */
+        .background-zoom {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--color-background); /* Color de fallback */
+            background-image: url('https://raw.githubusercontent.com/juone0450/jmail/main/fondo.png');
+            background-size: cover;
+            background-position: center center;
+            animation: zoom-effect 40s infinite alternate cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: -1; /* Lo coloca detrás de todo el contenido */
         }
 
         /* --- EFECTO DE LÍNEAS DE ESCANEO (SCANLINES) --- */
@@ -110,7 +125,8 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: var(--color-background);
+            /* Ahora el fondo del glitch es transparente, revelando el fondo animado */
+            background-color: transparent; 
         }
 
         .glitch::before {
@@ -136,11 +152,10 @@
             animation: rgb-sweep 2s linear infinite;
         }
         
-        /* CAMBIO DE COLOR DEL BOTÓN DE INVITACIÓN */
         #invitation-btn {
-            background-color: rgba(0, 246, 255, 0.1); /* CAMBIADO a Cian transparente */
-            border-color: var(--color-cyan); /* CAMBIADO a Cian */
-            color: var(--color-cyan); /* CAMBIADO a Cian */
+            background-color: rgba(0, 246, 255, 0.1);
+            border-color: var(--color-cyan);
+            color: var(--color-cyan);
             text-shadow: 0 0 5px var(--color-cyan);
             box-shadow: 0 0 10px var(--color-cyan) inset, 0 0 10px var(--color-cyan);
         }
@@ -182,7 +197,7 @@
             text-align: center;
             position: relative;
             animation: modal-appear 0.5s ease-out;
-            user-select: none; /* Evita que el texto se pueda seleccionar */
+            user-select: none;
         }
         
         .modal-logo {
@@ -235,6 +250,11 @@
 
 
         /* --- ANIMACIONES (Keyframes) --- */
+        @keyframes zoom-effect {
+            from { transform: scale(1); }
+            to { transform: scale(1.1); }
+        }
+
         @keyframes text-glow {
             from { text-shadow: 0 0 5px var(--color-text), 0 0 10px var(--color-cyan), 0 0 20px var(--color-cyan); }
             to { text-shadow: 0 0 10px var(--color-text), 0 0 20px var(--color-cyan), 0 0 40px var(--color-cyan); }
@@ -292,6 +312,9 @@
     </style>
 </head>
 <body>
+
+    <!-- El div del fondo se añade aquí -->
+    <div class="background-zoom"></div>
 
     <main>
         <h1 class="glitch" data-text="jMail">jMail</h1>
