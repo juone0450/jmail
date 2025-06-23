@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>jMail - Concepto</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&family=Fira+Code:wght@300..700&display=swap" rel="stylesheet">
+    <style>
+        /* --- CONFIGURACIÓN GENERAL Y PALETA DE COLORES --- */
+        :root {
+            --color-background: #0d0221;
+            --color-cyan: #00f6ff;
+            --color-green: #00ff87;
+            --color-magenta: #ff00e5;
+            --color-text: #e6feff;
+
+            --font-display: 'Orbitron', sans-serif;
+            --font-mono: 'Fira Code', monospace;
+            
+            --mouse-x: 50%;
+            --mouse-y: 50%;
+        }
+
+        body {
+            background-color: var(--color-background);
+            color: var(--color-text);
+            font-family: var(--font-mono);
+            margin: 0;
+            padding: 2rem;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            overflow-x: hidden;
+            box-sizing: border-box;
+        }
+
+        /* --- EFECTO DE LÍNEAS DE ESCANEO (SCANLINES) --- */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: linear-gradient(rgba(0,0,0,0.3) 1px, transparent 1px);
+            background-size: 1px 3px;
+            opacity: 0.2;
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        /* --- TIPOGRAFÍA Y ESTILOS DE TEXTO --- */
+        h1, h2, h3 {
+            font-family: var(--font-display);
+            letter-spacing: 2px;
+            font-weight: 700;
+        }
+
+        h1 {
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            margin-bottom: 0.5rem;
+            animation: text-glow 2.5s infinite alternate;
+        }
+        
+        h2 {
+           font-size: clamp(1.5rem, 5vw, 2.5rem);
+           color: var(--color-green);
+           text-shadow: 0 0 5px var(--color-green), 0 0 10px var(--color-green);
+        }
+
+        p {
+            max-width: 600px;
+            margin: 1rem auto;
+            line-height: 1.7;
+            font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+        }
+        
+        a, button {
+            font-family: var(--font-display);
+            color: var(--color-cyan);
+            text-decoration: none;
+            border: 2px solid var(--color-cyan);
+            padding: 0.8rem 1.5rem;
+            border-radius: 5px;
+            background-color: transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            text-shadow: 0 0 5px var(--color-cyan);
+            box-shadow: 0 0 10px var(--color-cyan) inset, 0 0 10px var(--color-cyan);
+        }
+
+
+        /* --- EFECTOS DE GLITCH --- */
+        .glitch {
+            position: relative;
+            animation: glitch-anim 5s infinite steps(1);
+        }
+
+        .glitch::before,
+        .glitch::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--color-background);
+        }
+
+        .glitch::before {
+            left: 2px;
+            text-shadow: -2px 0 var(--color-magenta);
+            clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
+            animation: glitch-anim-2 5s infinite steps(1);
+        }
+
+        .glitch::after {
+            left: -2px;
+            text-shadow: -2px 0 var(--color-green), 2px 2px var(--color-magenta);
+            clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%);
+            animation: glitch-anim-1 5s infinite steps(1);
+        }
+
+        /* --- EFECTO ESPECTRO (Hover) --- */
+        .interactive-hover {
+            transition: transform 0.2s ease-out;
+        }
+        .interactive-hover:hover {
+            transform: scale(1.05) translate(calc((var(--mouse-x) - 50%) / -20), calc((var(--mouse-y) - 50%) / -20));
+            animation: rgb-sweep 2s linear infinite;
+        }
+        
+        /* CAMBIO DE COLOR DEL BOTÓN DE INVITACIÓN */
+        #invitation-btn {
+            background-color: rgba(0, 246, 255, 0.1); /* CAMBIADO a Cian transparente */
+            border-color: var(--color-cyan); /* CAMBIADO a Cian */
+            color: var(--color-cyan); /* CAMBIADO a Cian */
+            text-shadow: 0 0 5px var(--color-cyan);
+            box-shadow: 0 0 10px var(--color-cyan) inset, 0 0 10px var(--color-cyan);
+        }
+
+        #invitation-btn:hover {
+            animation: rgb-sweep 0.5s linear infinite, glitch-anim 0.3s infinite steps(1);
+        }
+        
+        /* --- ESTILOS DEL MODAL --- */
+        .modal {
+            position: fixed;
+            z-index: 1001;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(13, 2, 33, 0.8);
+            backdrop-filter: blur(5px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+        
+        .modal.show {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-content {
+            background: rgba(13, 2, 33, 0.5);
+            border: 2px solid var(--color-cyan);
+            box-shadow: 0 0 20px var(--color-cyan), 0 0 30px var(--color-cyan) inset;
+            border-radius: 10px;
+            padding: 2rem 3rem;
+            width: 90%;
+            max-width: 600px;
+            text-align: center;
+            position: relative;
+            animation: modal-appear 0.5s ease-out;
+            user-select: none; /* Evita que el texto se pueda seleccionar */
+        }
+        
+        .modal-logo {
+            font-family: var(--font-display);
+            font-size: 2rem;
+            color: var(--color-cyan);
+            text-shadow: 0 0 10px var(--color-cyan);
+            animation: text-glow 2s infinite alternate;
+        }
+
+        .url-box {
+            background: #000;
+            border: 1px dashed var(--color-green);
+            padding: 1.5rem;
+            margin: 2rem 0;
+            animation: url-flicker 4s infinite steps(1);
+        }
+
+        .fake-url {
+            font-family: var(--font-mono);
+            font-size: 1.5rem;
+            color: var(--color-green);
+            text-shadow: 0 0 5px var(--color-green);
+            letter-spacing: 2px;
+        }
+        
+        .modal-message {
+            color: var(--color-text);
+            opacity: 0.8;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 2rem;
+            color: var(--color-magenta);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            background: none;
+            box-shadow: none;
+            padding: 0;
+        }
+        .close-btn:hover {
+            transform: scale(1.2) rotate(90deg);
+            text-shadow: 0 0 10px var(--color-magenta);
+            animation: none;
+        }
+
+
+        /* --- ANIMACIONES (Keyframes) --- */
+        @keyframes text-glow {
+            from { text-shadow: 0 0 5px var(--color-text), 0 0 10px var(--color-cyan), 0 0 20px var(--color-cyan); }
+            to { text-shadow: 0 0 10px var(--color-text), 0 0 20px var(--color-cyan), 0 0 40px var(--color-cyan); }
+        }
+        
+        @keyframes rgb-sweep {
+            0% { border-color: var(--color-cyan); color: var(--color-cyan); text-shadow: 0 0 5px var(--color-cyan); box-shadow: 0 0 10px var(--color-cyan) inset, 0 0 10px var(--color-cyan); }
+            33% { border-color: var(--color-green); color: var(--color-green); text-shadow: 0 0 5px var(--color-green); box-shadow: 0 0 10px var(--color-green) inset, 0 0 10px var(--color-green); }
+            66% { border-color: var(--color-magenta); color: var(--color-magenta); text-shadow: 0 0 5px var(--color-magenta); box-shadow: 0 0 10px var(--color-magenta) inset, 0 0 10px var(--color-magenta); }
+            100% { border-color: var(--color-cyan); color: var(--color-cyan); text-shadow: 0 0 5px var(--color-cyan); box-shadow: 0 0 10px var(--color-cyan) inset, 0 0 10px var(--color-cyan); }
+        }
+
+        @keyframes glitch-anim {
+            0% { transform: translate(0); } 19% { transform: translate(0); }
+            20% { transform: translate(-5px, 5px); } 29% { transform: translate(-5px, 5px); }
+            30% { transform: translate(5px, -5px); } 39% { transform: translate(5px, -5px); }
+            40% { transform: translate(-5px, -5px); } 49% { transform: translate(-5px, -5px); }
+            50% { transform: translate(5px, 5px); } 59% { transform: translate(5px, 5px); }
+            60% { transform: translate(0); } 100% { transform: translate(0); }
+        }
+        @keyframes glitch-anim-1 { 
+            0% { clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%); }
+            20% { clip-path: polygon(0 20%, 100% 20%, 100% 30%, 0 30%); }
+            40% { clip-path: polygon(0 80%, 100% 80%, 100% 90%, 0 90%); }
+            60% { clip-path: polygon(0 40%, 100% 40%, 100% 55%, 0 55%); }
+            80% { clip-path: polygon(0 60%, 100% 60%, 100% 75%, 0 75%); }
+            100% { clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%); }
+        }
+        @keyframes glitch-anim-2 {
+            0% { clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%); }
+            20% { clip-path: polygon(0 70%, 100% 70%, 100% 80%, 0 80%); }
+            40% { clip-path: polygon(0 30%, 100% 30%, 100% 40%, 0 40%); }
+            60% { clip-path: polygon(0 50%, 100% 50%, 100% 65%, 0 65%); }
+            80% { clip-path: polygon(0 10%, 100% 10%, 100% 25%, 0 25%); }
+            100% { clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%); }
+        }
+        
+        @keyframes modal-appear {
+            from { transform: scale(0.8) translateY(50px); opacity: 0; }
+            to { transform: scale(1) translateY(0); opacity: 1; }
+        }
+        
+        @keyframes url-flicker {
+            0% { opacity: 1; transform: scale(1); } 49% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.02); } 51% { opacity: 1; transform: scale(1); }
+            74% { opacity: 1; box-shadow: 0 0 10px var(--color-green); } 75% { opacity: 0.5; box-shadow: none; }
+            76% { opacity: 1; box-shadow: 0 0 10px var(--color-green); } 100% { opacity: 1; }
+        }
+        
+        footer {
+            margin-top: 4rem;
+            opacity: 0.5;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <main>
+        <h1 class="glitch" data-text="jMail">jMail</h1>
+        <p class="interactive-hover">
+            Conexiones, no solo correos. Un nuevo concepto de email enfocado en la privacidad
+            y en recuperar el valor de la comunicación directa.
+        </p>
+
+        <section style="margin-top: 4rem;">
+            <h2>Función Clave: Invitación</h2>
+            <p>
+                Comparte contenido de forma segura y personal con un enlace único y efímero.
+                Una experiencia diseñada para valorar cada interacción.
+            </p>
+            <button id="invitation-btn">Probar Invitación</button>
+        </section>
+    </main>
+
+    <footer>
+        <p>Un concepto creado por Juan Martín Barrientos.</p>
+    </footer>
+
+    <!-- Modal de Invitación -->
+    <div id="invitation-modal" class="modal">
+        <div class="modal-content">
+            <button id="close-modal-btn" class="close-btn">&times;</button>
+            <div class="modal-logo">jMail</div>
+            <p>Para acceder al contenido, visita desde tu navegador:</p>
+            <div class="url-box">
+                <span id="fake-url-host" class="fake-url">jlink.red/</span><span id="fake-url-path" class="fake-url"></span>
+            </div>
+            <p class="modal-message">"Compartido de forma segura y personal."</p>
+        </div>
+    </div>
+
+    <script>
+        // --- SCRIPT PARA INTERACTIVIDAD DEL MOUSE ---
+        document.addEventListener('mousemove', (e) => {
+            // Actualiza las propiedades CSS con la posición del mouse
+            // El cálculo es para obtener un porcentaje de la posición en la ventana
+            const x = (e.clientX / window.innerWidth) * 100;
+            const y = (e.clientY / window.innerHeight) * 100;
+            document.body.style.setProperty('--mouse-x', `${x}%`);
+            document.body.style.setProperty('--mouse-y', `${y}%`);
+        });
+
+        // --- SCRIPT PARA EL MODAL DE INVITACIÓN ---
+        const invitationBtn = document.getElementById('invitation-btn');
+        const modal = document.getElementById('invitation-modal');
+        const closeModalBtn = document.getElementById('close-modal-btn');
+        const fakeUrlPath = document.getElementById('fake-url-path');
+
+        // Función para generar una cadena aleatoria de 8 caracteres
+        function generateRandomString() {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            let result = '';
+            for (let i = 0; i < 8; i++) {
+                result += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return result;
+        }
+
+        // Abrir el modal
+        invitationBtn.addEventListener('click', () => {
+            // Generar y mostrar la nueva URL ficticia cada vez que se abre
+            fakeUrlPath.textContent = generateRandomString();
+            modal.classList.add('show');
+        });
+
+        // Cerrar el modal
+        closeModalBtn.addEventListener('click', () => {
+            modal.classList.remove('show');
+        });
+
+        // Cerrar el modal al hacer clic fuera del contenido
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.classList.remove('show');
+            }
+        });
+        
+        // Cerrar el modal con la tecla Escape
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modal.classList.contains('show')) {
+                modal.classList.remove('show');
+            }
+        });
+
+    </script>
+</body>
+</html>
