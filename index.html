@@ -46,7 +46,8 @@
             width: 100%;
             height: 100%;
             background-color: var(--color-background);
-            background-image: url('https://raw.githubusercontent.com/juone0450/jmail/main/fondo.png');
+            /* Se añade una capa oscura semitransparente sobre la imagen */
+            background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://raw.githubusercontent.com/juone0450/jmail/main/fondo.png');
             background-size: cover;
             background-position: center center;
             animation: zoom-effect 40s infinite alternate cubic-bezier(0.4, 0, 0.2, 1);
@@ -86,7 +87,7 @@
             color: var(--color-cyan);
             cursor: pointer;
             transition: all 0.2s ease;
-            box-shadow: none; /* Reset para que no herede el box-shadow general */
+            box-shadow: none;
         }
 
         .language-selector button:hover, .language-selector button.active {
@@ -503,14 +504,13 @@
                 if (translation) {
                     if (el.dataset.langKey === 'title') {
                         el.textContent = translation;
-                        el.dataset.text = translation; // Actualiza el data-text para el efecto glitch
+                        el.dataset.text = translation;
                     } else {
                        el.textContent = translation;
                     }
                 }
             });
 
-            // Actualizar el botón activo
             languageSelector.querySelector('.active').classList.remove('active');
             e.target.classList.add('active');
         });
