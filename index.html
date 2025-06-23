@@ -68,6 +68,34 @@
             z-index: 1000;
         }
 
+        /* --- BOTONES DE IDIOMA --- */
+        .language-selector {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            z-index: 1002;
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .language-selector button {
+            padding: 0.3rem 0.6rem;
+            font-size: 0.8rem;
+            border: 1px solid var(--color-cyan);
+            background-color: rgba(13, 2, 33, 0.5);
+            color: var(--color-cyan);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: none; /* Reset para que no herede el box-shadow general */
+        }
+
+        .language-selector button:hover, .language-selector button.active {
+            background-color: var(--color-cyan);
+            color: var(--color-background);
+            text-shadow: none;
+            box-shadow: 0 0 10px var(--color-cyan);
+        }
+
         /* --- TIPOGRAFÍA Y ESTILOS DE TEXTO --- */
         h1, h2, h3 {
             font-family: var(--font-display);
@@ -355,28 +383,36 @@
 
     <div class="background-zoom"></div>
 
+    <header class="language-selector">
+        <button data-lang="es" class="active">ES</button>
+        <button data-lang="en">EN</button>
+        <button data-lang="ru">RU</button>
+        <button data-lang="de">DE</button>
+        <button data-lang="cn">CN</button>
+    </header>
+
     <main>
-        <h1 class="glitch" data-text="jMail">jMail</h1>
-        <p class="interactive-hover">
+        <h1 class="glitch" data-text="jMail" data-lang-key="title">jMail</h1>
+        <p class="interactive-hover" data-lang-key="slogan">
             Conexiones, no solo correos. Un nuevo concepto de email enfocado en la privacidad
             y en recuperar el valor de la comunicación directa.
         </p>
 
         <section style="margin-top: 4rem;">
-            <h2>Función Clave: Invitación</h2>
-            <p>
+            <h2 data-lang-key="featureTitle">Función Clave: Invitación</h2>
+            <p data-lang-key="featureDescription">
                 Comparte contenido de forma segura y personal con un enlace único y efímero.
                 Una experiencia diseñada para valorar cada interacción.
             </p>
-            <button id="invitation-btn">Probar Invitación</button>
+            <button id="invitation-btn" data-lang-key="invitationButton">Probar Invitación</button>
         </section>
     </main>
 
     <footer>
         <p>
-            Puede verse otros proyectos en <a href="https://github.com/juone0450" target="_blank" rel="noopener noreferrer" class="footer-link">GitHub</a>.
+            <span data-lang-key="githubLinkText">Puede verse otros proyectos en</span> <a href="https://github.com/juone0450" target="_blank" rel="noopener noreferrer" class="footer-link">GitHub</a>.
             <br>
-            Un concepto creado por <a href="https://juone0450.github.io/lanzador/" target="_blank" rel="noopener noreferrer" class="creator-name">Juan Martín Barrientos</a>.
+            <span data-lang-key="creatorCredit">Un concepto creado por</span> <a href="https://juone0450.github.io/lanzador/" target="_blank" rel="noopener noreferrer" class="creator-name">Juan Martín Barrientos</a>.
         </p>
     </footer>
 
@@ -385,15 +421,101 @@
         <div class="modal-content">
             <button id="close-modal-btn" class="close-btn">&times;</button>
             <div class="modal-logo">jMail</div>
-            <p>Para acceder al contenido, visita desde tu navegador:</p>
+            <p data-lang-key="modalInstruction">Para acceder al contenido, visita desde tu navegador:</p>
             <div class="url-box">
                 <span id="fake-url-host" class="fake-url">jlink.red/</span><span id="fake-url-path" class="fake-url"></span>
             </div>
-            <p class="modal-message">"Compartido de forma segura y personal."</p>
+            <p class="modal-message" data-lang-key="modalMessage">"Compartido de forma segura y personal."</p>
         </div>
     </div>
 
     <script>
+        // --- SCRIPT DE TRADUCCIÓN ---
+        const translations = {
+            es: {
+                title: "jMail",
+                slogan: "Conexiones, no solo correos. Un nuevo concepto de email enfocado en la privacidad y en recuperar el valor de la comunicación directa.",
+                featureTitle: "Función Clave: Invitación",
+                featureDescription: "Comparte contenido de forma segura y personal con un enlace único y efímero. Una experiencia diseñada para valorar cada interacción.",
+                invitationButton: "Probar Invitación",
+                githubLinkText: "Puede verse otros proyectos en",
+                creatorCredit: "Un concepto creado por",
+                modalInstruction: "Para acceder al contenido, visita desde tu navegador:",
+                modalMessage: '"Compartido de forma segura y personal."'
+            },
+            en: {
+                title: "jMail",
+                slogan: "Connections, not just emails. A new email concept focused on privacy and recovering the value of direct communication.",
+                featureTitle: "Key Feature: Invitation",
+                featureDescription: "Share content securely and personally with a unique and ephemeral link. An experience designed to value every interaction.",
+                invitationButton: "Try Invitation",
+                githubLinkText: "You can see other projects on",
+                creatorCredit: "A concept created by",
+                modalInstruction: "To access the content, visit from your browser:",
+                modalMessage: '"Shared securely and personally."'
+            },
+            ru: {
+                title: "jMail",
+                slogan: "Связи, а не просто письма. Новая концепция электронной почты, ориентированная на конфиденциальность и восстановление ценности прямого общения.",
+                featureTitle: "Ключевая особенность: Приглашение",
+                featureDescription: "Делитесь контентом безопасно и лично с помощью уникальной и эфемерной ссылки. Опыт, созданный для того, чтобы ценить каждое взаимодействие.",
+                invitationButton: "Попробовать Приглашение",
+                githubLinkText: "Другие проекты можно посмотреть на",
+                creatorCredit: "Концепция создана",
+                modalInstruction: "Чтобы получить доступ к содержимому, перейдите в своем браузере:",
+                modalMessage: '"Безопасно и лично."'
+            },
+            de: {
+                title: "jMail",
+                slogan: "Verbindungen, nicht nur E-Mails. Ein neues E-Mail-Konzept, das sich auf den Datenschutz und die Wiederherstellung des Wertes der direkten Kommunikation konzentriert.",
+                featureTitle: "Hauptmerkmal: Einladung",
+                featureDescription: "Teilen Sie Inhalte sicher und persönlich mit einem einzigartigen und vergänglichen Link. Eine Erfahrung, die darauf ausgelegt ist, jede Interaktion zu schätzen.",
+                invitationButton: "Einladung Testen",
+                githubLinkText: "Weitere Projekte finden Sie auf",
+                creatorCredit: "Ein Konzept erstellt von",
+                modalInstruction: "Um auf den Inhalt zuzugreifen, besuchen Sie von Ihrem Browser aus:",
+                modalMessage: '"Sicher und persönlich geteilt."'
+            },
+            cn: {
+                title: "jMail",
+                slogan: "连接，而不仅仅是电子邮件。一个注重隐私并恢复直接沟通价值的新电子邮件概念。",
+                featureTitle: "主要功能：邀请",
+                featureDescription: "通过独特而短暂的链接安全地、个人地共享内容。一种旨在珍视每一次互动的体验。",
+                invitationButton: "尝试邀请",
+                githubLinkText: "您可以在",
+                creatorCredit: "一个概念由",
+                modalInstruction: "要访问内容，请从您的浏览器访问：",
+                modalMessage: '"安全地、个人地共享。"'
+            }
+        };
+
+        const languageSelector = document.querySelector('.language-selector');
+        
+        languageSelector.addEventListener('click', (e) => {
+            if (e.target.tagName !== 'BUTTON') return;
+            
+            const lang = e.target.dataset.lang;
+            const elementsToTranslate = document.querySelectorAll('[data-lang-key]');
+            
+            elementsToTranslate.forEach(el => {
+                const key = el.dataset.langKey;
+                const translation = translations[lang][key];
+                if (translation) {
+                    if (el.dataset.langKey === 'title') {
+                        el.textContent = translation;
+                        el.dataset.text = translation; // Actualiza el data-text para el efecto glitch
+                    } else {
+                       el.textContent = translation;
+                    }
+                }
+            });
+
+            // Actualizar el botón activo
+            languageSelector.querySelector('.active').classList.remove('active');
+            e.target.classList.add('active');
+        });
+
+
         // --- SCRIPT PARA INTERACTIVIDAD DEL MOUSE ---
         document.addEventListener('mousemove', (e) => {
             const x = (e.clientX / window.innerWidth) * 100;
