@@ -36,7 +36,6 @@
             text-align: center;
             overflow-x: hidden;
             box-sizing: border-box;
-            /* El color de fondo se mueve al nuevo div de fondo */
         }
 
         /* --- NUEVO FONDO ANIMADO --- */
@@ -46,12 +45,12 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: var(--color-background); /* Color de fallback */
+            background-color: var(--color-background);
             background-image: url('https://raw.githubusercontent.com/juone0450/jmail/main/fondo.png');
             background-size: cover;
             background-position: center center;
             animation: zoom-effect 40s infinite alternate cubic-bezier(0.4, 0, 0.2, 1);
-            z-index: -1; /* Lo coloca detrás de todo el contenido */
+            z-index: -1;
         }
 
         /* --- EFECTO DE LÍNEAS DE ESCANEO (SCANLINES) --- */
@@ -125,7 +124,6 @@
             left: 0;
             width: 100%;
             height: 100%;
-            /* Ahora el fondo del glitch es transparente, revelando el fondo animado */
             background-color: transparent; 
         }
 
@@ -249,6 +247,54 @@
         }
 
 
+        /* --- FOOTER --- */
+        footer {
+            margin-top: 4rem;
+            opacity: 0.7;
+            font-size: 0.9rem;
+            max-width: 600px;
+        }
+
+        .footer-link {
+            display: inline;
+            border: none;
+            box-shadow: none;
+            padding: 0;
+            text-decoration: underline;
+            text-shadow: none;
+            background: none;
+            font-family: var(--font-mono);
+            text-transform: none;
+            letter-spacing: normal;
+        }
+
+        .footer-link:hover {
+            color: var(--color-green);
+            text-shadow: 0 0 5px var(--color-green);
+            animation: none;
+        }
+        
+        .creator-name {
+            display: inline-block;
+            border: none;
+            box-shadow: none;
+            padding: 0;
+            text-decoration: none;
+            text-shadow: 0 0 4px var(--color-cyan);
+            background: none;
+            font-family: var(--font-display);
+            color: var(--color-cyan);
+            transition: all 0.3s ease;
+        }
+
+        .creator-name:hover {
+            color: var(--color-green);
+            text-shadow: 0 0 8px var(--color-green);
+            transform: scale(1.05);
+            animation: none;
+        }
+
+
         /* --- ANIMACIONES (Keyframes) --- */
         @keyframes zoom-effect {
             from { transform: scale(1); }
@@ -303,17 +349,10 @@
             74% { opacity: 1; box-shadow: 0 0 10px var(--color-green); } 75% { opacity: 0.5; box-shadow: none; }
             76% { opacity: 1; box-shadow: 0 0 10px var(--color-green); } 100% { opacity: 1; }
         }
-        
-        footer {
-            margin-top: 4rem;
-            opacity: 0.5;
-            font-size: 0.9rem;
-        }
     </style>
 </head>
 <body>
 
-    <!-- El div del fondo se añade aquí -->
     <div class="background-zoom"></div>
 
     <main>
@@ -334,7 +373,11 @@
     </main>
 
     <footer>
-        <p>Un concepto creado por Juan Martín Barrientos.</p>
+        <p>
+            Puede verse otros proyectos en <a href="https://github.com/juone0450" target="_blank" rel="noopener noreferrer" class="footer-link">GitHub</a>.
+            <br>
+            Un concepto creado por <a href="https://juone0450.github.io/lanzador/" target="_blank" rel="noopener noreferrer" class="creator-name">Juan Martín Barrientos</a>.
+        </p>
     </footer>
 
     <!-- Modal de Invitación -->
@@ -353,8 +396,6 @@
     <script>
         // --- SCRIPT PARA INTERACTIVIDAD DEL MOUSE ---
         document.addEventListener('mousemove', (e) => {
-            // Actualiza las propiedades CSS con la posición del mouse
-            // El cálculo es para obtener un porcentaje de la posición en la ventana
             const x = (e.clientX / window.innerWidth) * 100;
             const y = (e.clientY / window.innerHeight) * 100;
             document.body.style.setProperty('--mouse-x', `${x}%`);
@@ -367,7 +408,6 @@
         const closeModalBtn = document.getElementById('close-modal-btn');
         const fakeUrlPath = document.getElementById('fake-url-path');
 
-        // Función para generar una cadena aleatoria de 8 caracteres
         function generateRandomString() {
             const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
             let result = '';
@@ -377,26 +417,21 @@
             return result;
         }
 
-        // Abrir el modal
         invitationBtn.addEventListener('click', () => {
-            // Generar y mostrar la nueva URL ficticia cada vez que se abre
             fakeUrlPath.textContent = generateRandomString();
             modal.classList.add('show');
         });
 
-        // Cerrar el modal
         closeModalBtn.addEventListener('click', () => {
             modal.classList.remove('show');
         });
 
-        // Cerrar el modal al hacer clic fuera del contenido
         modal.addEventListener('click', (e) => {
             if (e.target === modal) {
                 modal.classList.remove('show');
             }
         });
         
-        // Cerrar el modal con la tecla Escape
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape' && modal.classList.contains('show')) {
                 modal.classList.remove('show');
